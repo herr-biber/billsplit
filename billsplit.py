@@ -10,13 +10,13 @@ for person in all:
 personalBills = defaultdict(dict)
 
 for b in bills:
-    # split bill evenly among deptors
-    amountPerPerson = b["amount"] / len(b["deptors"])
+    # split bill evenly among debtors
+    amountPerPerson = b["amount"] / len(b["debtors"])
 
     # put amount on accounts
-    for deptor in b["deptors"]:
-        accounts[deptor] -= amountPerPerson
-        personalBill = personalBills[deptor]
+    for debtor in b["debtors"]:
+        accounts[debtor] -= amountPerPerson
+        personalBill = personalBills[debtor]
         
         # accumulate amounts of same-named bills
         if b["name"] in personalBill.keys():
@@ -24,7 +24,7 @@ for b in bills:
         else:
             personalBill[b["name"]] = round(amountPerPerson, 2)
         # CAVE: this overwrites name, if used more than once
-#        personalBills[deptor].update({b["name"]: round(amountPerPerson, 2)})
+#        personalBills[debtor].update({b["name"]: round(amountPerPerson, 2)})
         
     # lender paid money, so fill his/her account
     accounts[b["lender"]] += b["amount"]
