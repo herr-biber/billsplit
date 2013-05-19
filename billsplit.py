@@ -49,6 +49,17 @@ for person, amount in accounts.items():
 #print
 #print
 
+# show bills
+lastlender = None
+for b in sorted(bills, key=lambda k: k['lender']):
+    lender = b['lender']
+    if lastlender != lender:
+        lastlender = lender
+        print
+        print "Bills paid by %s:" % lender
+    print "%9.2f %s for (%s)" % (b['amount'], b['name'], ", ".join(b['debtors']))
+print
+print
 # show personal bills
 for person, bills in personalBills.items():
     print "Personal bill for %s:" % (person)
@@ -61,7 +72,7 @@ for person, bills in personalBills.items():
     print "%9.2f total" % sum
     print
 print
-    
+
 # show, who has to transfer money to whom
 print "Transactions:"
 for person, amount in accounts.items():
