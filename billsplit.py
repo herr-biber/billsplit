@@ -49,14 +49,25 @@ for person, amount in accounts.items():
 #print
 #print
 
-# show bills
+# show bills sorted by lender
 lastlender = None
+sum = 0.0
 for b in sorted(bills, key=lambda k: k['lender']):
     lender = b['lender']
+    
+    # new lender
     if lastlender != lender:
+        # do not print sum header for lastlender == None
+        if lastlender:
+            print "    -----"
+            print "%9.2f total" % sum
+            print
+            
         lastlender = lender
-        print
+        sum = 0
         print "Bills paid by %s:" % lender
+        
+    sum += b['amount']        
     print "%9.2f %s for (%s)" % (b['amount'], b['name'], ", ".join(b['debtors']))
 print
 print "=" * 78
