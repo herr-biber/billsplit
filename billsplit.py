@@ -69,7 +69,12 @@ for b in sorted(bills, key=lambda k: k['lender']):
         
     sum += b['amount']        
     print "%9.2f %s for (%s)" % (b['amount'], b['name'], ", ".join(b['debtors']))
-print
+    
+if lastlender:
+    print "    -----"
+    print "%9.2f total" % sum
+    print
+    
 print "=" * 78
 print
 
