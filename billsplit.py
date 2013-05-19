@@ -58,7 +58,7 @@ for person, bills in personalBills.items():
         print "%9.2f %s" % (amount, name)
         sum += amount
     print "    -----"
-    print "%9.2f total" % (sum)
+    print "%9.2f total" % sum
     print
 print
     
