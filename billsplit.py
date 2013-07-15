@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 from collections import defaultdict
 from bill import * # import the bill file
 
@@ -37,17 +38,17 @@ assert(round(sum, 2) == 0.00)
 
 # use the one who paid most as accountant
 max = 0.0
-accountant = accounts.iterkeys().next()
+accountant = None
 for person, amount in accounts.items():
     if amount > max:
         accountant = person
         max = amount
 
 
-#print "Accountant:"
-#print "   ", accountant
-#print
-#print
+#print("Accountant:")
+#print("   ", accountant)
+#print()
+#print()
 
 # show bills sorted by lender
 lastlender = None
@@ -59,41 +60,41 @@ for b in sorted(bills, key=lambda k: k['lender']):
     if lastlender != lender:
         # do not print sum header for lastlender == None
         if lastlender:
-            print "    -----"
-            print "%9.2f total" % sum
-            print
+            print("    -----")
+            print("%9.2f total" % sum)
+            print()
             
         lastlender = lender
         sum = 0
-        print "Bills paid by %s:" % lender
+        print("Bills paid by %s:" % lender)
         
     sum += b['amount']        
-    print "%9.2f %s for (%s)" % (b['amount'], b['name'], ", ".join(b['debtors']))
+    print("%9.2f %s for (%s)" % (b['amount'], b['name'], ", ".join(b['debtors'])))
     
 if lastlender:
-    print "    -----"
-    print "%9.2f total" % sum
-    print
+    print("    -----")
+    print("%9.2f total" % sum)
+    print()
     
-print "=" * 78
+print("=" * 78)
 print
 
 # show personal bills
 for person, bills in personalBills.items():
-    print "Personal bill for %s:" % (person)
+    print("Personal bill for %s:" % (person))
     
     sum = 0.0
     for name, amount in bills.items():
-        print "%9.2f %s" % (amount, name)
+        print("%9.2f %s" % (amount, name))
         sum += amount
-    print "    -----"
-    print "%9.2f total" % sum
-    print
-print "=" * 78
-print
+    print("    -----")
+    print("%9.2f total" % sum)
+    print()
+print("=" * 78)
+print()
 
 # show, who has to transfer money to whom
-print "Transactions:"
+print("Transactions:")
 for person, amount in accounts.items():
 
     # skip accountant
@@ -101,7 +102,7 @@ for person, amount in accounts.items():
         continue
     
     if amount <= 0.0:
-        print "    %s -> %s: %.2f" % (person, accountant, round(-amount, 2))
+        print("    %s -> %s: %.2f" % (person, accountant, round(-amount, 2)))
     else:
-        print "    %s -> %s: %.2f" % (accountant, person, round(amount, 2))
+        print("    %s -> %s: %.2f" % (accountant, person, round(amount, 2)))
 print
