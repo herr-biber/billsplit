@@ -77,7 +77,7 @@ if lastlender:
     print()
     
 print("=" * 78)
-print
+print()
 
 # show personal bills
 for person, bills in personalBills.items():
