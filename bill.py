@@ -1,3 +1,6 @@
+#!/usr/bin/env python2
+from billsplit import billsplit
+
 all = ["MR", "JS", "MH", "PT", "JR"]
 
 bills = [
@@ -65,3 +68,5 @@ bills = [
         'comment': ""
     },
 ]
+
+billsplit(all, bills)
