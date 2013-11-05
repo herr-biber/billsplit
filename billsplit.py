@@ -10,8 +10,14 @@ def billsplit(persons, bills):
     personalBills = defaultdict(dict)
 
     for b in bills:
+        amount = b["amount"]
+
+        # use conversion rate
+        if "conversion" in b:
+            amount *= b["conversion"]
+
         # split bill evenly among debtors
-        amountPerPerson = b["amount"] / len(b["debtors"])
+        amountPerPerson = amount / len(b["debtors"])
 
         # put amount on accounts
         for debtor in b["debtors"]:
@@ -27,7 +33,7 @@ def billsplit(persons, bills):
     #        personalBills[debtor].update({b["name"]: round(amountPerPerson, 2)})
 
         # lender paid money, so fill his/her account
-        accounts[b["lender"]] += b["amount"]
+        accounts[b["lender"]] += amount
 
     # make sure we are not printing or burning money
     sum = 0.0
@@ -55,7 +61,11 @@ def billsplit(persons, bills):
     for b in sorted(bills, key=lambda k: k['lender']):
         lender = b['lender']
 
-        # new lender
+        conversion_rate = 1.0
+        if 'conversion' in b:
+            conversion_rate = b['conversion']
+
+            # new lender
         if lastlender != lender:
             # do not print sum header for lastlender == None
             if lastlender:
@@ -67,8 +77,8 @@ def billsplit(persons, bills):
             sum = 0
             print("Bills paid by %s:" % lender)
 
-        sum += b['amount']
-        print("%9.2f %s for (%s)" % (b['amount'], b['name'], ", ".join(b['debtors'])))
+        sum += b['amount'] * conversion_rate
+        print("%9.2f %s for (%s)" % (b['amount'] * conversion_rate, b['name'], ", ".join(b['debtors'])))
 
     if lastlender:
         print("    -----")
