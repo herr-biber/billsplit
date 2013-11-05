@@ -1,0 +1,73 @@
+Bills paid by JS:
+    25.00 KVV Ticket for (MR, JS, JR)
+    -----
+    25.00 total
+
+Bills paid by MR:
+    40.36 Geschenk Micha for (MR, JS, MH, PT, JR)
+    68.63 Tanken Berlin for (MR, JS, PT, JR)
+    87.17 Tanken Weinsberg 1 for (MR, JS, MH, PT, JR)
+    30.03 Tanken Weinsberg 2 for (MR, JS, MH, PT, JR)
+     5.79 Kaufland Weinsberg for (MR, JS, MH, PT, JR)
+     5.39 Kaufland Weinsberg for (PT)
+     2.62 Kaufland Weinsberg for (MH)
+    15.68 Kaufland Weinsberg for (MR, JS)
+    -----
+   255.68 total
+
+==============================================================================
+
+Personal bill for PT:
+    17.43 Tanken Weinsberg 1
+     6.55 Kaufland Weinsberg
+     8.07 Geschenk Micha
+     6.01 Tanken Weinsberg 2
+    17.16 Tanken Berlin
+    -----
+    55.22 total
+
+Personal bill for MH:
+     3.78 Kaufland Weinsberg
+     8.07 Geschenk Micha
+     6.01 Tanken Weinsberg 2
+    17.43 Tanken Weinsberg 1
+    -----
+    35.29 total
+
+Personal bill for JS:
+    17.43 Tanken Weinsberg 1
+     6.01 Tanken Weinsberg 2
+     9.00 Kaufland Weinsberg
+    17.16 Tanken Berlin
+     8.33 KVV Ticket
+     8.07 Geschenk Micha
+    -----
+    66.00 total
+
+Personal bill for MR:
+    17.43 Tanken Weinsberg 1
+     6.01 Tanken Weinsberg 2
+     9.00 Kaufland Weinsberg
+    17.16 Tanken Berlin
+     8.33 KVV Ticket
+     8.07 Geschenk Micha
+    -----
+    66.00 total
+
+Personal bill for JR:
+    17.43 Tanken Weinsberg 1
+     6.01 Tanken Weinsberg 2
+     1.16 Kaufland Weinsberg
+    17.16 Tanken Berlin
+     8.33 KVV Ticket
+     8.07 Geschenk Micha
+    -----
+    58.16 total
+
+==============================================================================
+
+Transactions:
+    PT -> MR: 55.22
+    MH -> MR: 35.30
+    JS -> MR: 41.00
+    JR -> MR: 58.16
