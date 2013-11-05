@@ -1,5 +1,8 @@
 from __future__ import print_function
 from collections import defaultdict
+from download_rates import getRateInEUR
+import datetime
+import sys
 
 def billsplit(persons, bills):
 
@@ -8,16 +11,43 @@ def billsplit(persons, bills):
         accounts[person] = 0.0
 
     personalBills = defaultdict(dict)
+    billNumber = 0
 
     for b in bills:
-        amount = b["amount"]
+        billNumber = billNumber + 1
 
-        # use conversion rate
-        if "conversion" in b:
-            amount *= b["conversion"]
+        amount = b["amount"]
 
         # split bill evenly among debtors
         amountPerPerson = amount / len(b["debtors"])
+
+        try:
+            bCurrency = b["currency"]
+        except KeyError:
+            print ("Bill Number: %s is incomplete, currency missing." % (billNumber))
+            sys.exit(0)
+        except IndexError:
+            bCurrency = "EUR"
+
+        try:
+            billDateStr = b["date"]
+        except IndexError:
+            billDateStr = datetime.date.today().strftime("%Y-%M-%d")
+            print ("Bill Number: %s is missing a Date, used todays." % (billNumber))
+        except KeyError:
+            billDateStr = datetime.date.today().strftime("%Y-%M-%d")
+            print ("Bill Number: %s is missing a Date, used todays." % (billNumber))
+
+        #get Conversion Rate
+        conversionRate = 1.0 / getRateInEUR(billDateStr,bCurrency)
+        print ("Bill Number: %s is denoted in %s and is converted by %.06f" % (billNumber,bCurrency,conversionRate))
+        print ("%s" % b["name"])
+
+        # Store conversion rate in bill for later
+        b['conversion'] = conversionRate
+
+        #convert foreign amount to EUR
+        amountPerPerson = conversionRate * amountPerPerson
 
         # put amount on accounts
         for debtor in b["debtors"]:
@@ -33,7 +63,7 @@ def billsplit(persons, bills):
     #        personalBills[debtor].update({b["name"]: round(amountPerPerson, 2)})
 
         # lender paid money, so fill his/her account
-        accounts[b["lender"]] += amount
+        accounts[b["lender"]] += amount * conversionRate
 
     # make sure we are not printing or burning money
     sum = 0.0
@@ -61,9 +91,7 @@ def billsplit(persons, bills):
     for b in sorted(bills, key=lambda k: k['lender']):
         lender = b['lender']
 
-        conversion_rate = 1.0
-        if 'conversion' in b:
-            conversion_rate = b['conversion']
+        conversion_rate = b['conversion']
 
             # new lender
         if lastlender != lender:
