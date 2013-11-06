@@ -24,26 +24,16 @@ def billsplit(persons, bills):
         # split bill evenly among debtors
         amountPerPerson = amount / len(b["debtors"])
 
-        try:
-            bCurrency = b["currency"]
-        except KeyError:
-            print ("Bill Number: %s is incomplete, currency missing." % (billNumber))
-            sys.exit(0)
-        except IndexError:
-            bCurrency = "EUR"
+        if not 'currency' in b:
+            raise IOError("Bill Number: %s is incomplete, currency missing." % (billNumber))
 
-        try:
-            billDateStr = b["date"]
-        except IndexError:
-            billDateStr = datetime.date.today().strftime("%Y-%M-%d")
-            print ("Bill Number: %s is missing a Date, used todays." % (billNumber))
-        except KeyError:
-            billDateStr = datetime.date.today().strftime("%Y-%M-%d")
-            print ("Bill Number: %s is missing a Date, used todays." % (billNumber))
+        if not 'date' in b:
+            b['date'] = datetime.date.today().strftime("%Y-%M-%d")
+            print ("Bill Number: %s is missing a Date, used today's date." % (billNumber))
 
         #get Conversion Rate
-        conversionRate = 1.0 / rateConverter.getRateInEUR(billDateStr,bCurrency)
-        print ("Bill Number: %s is denoted in %s and is converted by %.06f" % (billNumber,bCurrency,conversionRate))
+        conversionRate = 1.0 / rateConverter.getRateInEUR(b['date'], b['currency'])
+        print ("Bill Number: %s is denoted in %s and is converted by %.06f" % (billNumber, b['currency'], conversionRate))
         print ("%s" % b["name"])
 
         # Store conversion rate in bill for later
