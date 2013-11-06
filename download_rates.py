@@ -1,8 +1,8 @@
 import urllib
 import datetime
-import os
 from xml.dom import minidom
 from datetime import date, timedelta
+from collections import defaultdict
 
 #TODO parse all rates and put into buffer array
 class RateConverter:
@@ -11,58 +11,47 @@ class RateConverter:
         self.rates_filename = "rates-last90d.xml"
         self.xml_rates = minidom.parse(self.rates_filename)
 
+        # Get first cube node
+        # Skip gesmes nodes
+        parentCubeNode = self.xml_rates.firstChild.childNodes[2]
+
+        self.currencies = defaultdict(lambda: dict())
+
+        for dateNode in parentCubeNode.childNodes:
+            if dateNode.nodeType == minidom.Node.ELEMENT_NODE:
+                date = str(dateNode.attributes['time'].value)
+                for currencyNode in dateNode.childNodes:
+                    if currencyNode.nodeType == minidom.Node.ELEMENT_NODE:
+                        currency = str(currencyNode.attributes['currency'].value)
+                        rate = float(currencyNode.attributes['rate'].value)
+                        self.currencies[date][currency] = rate
+
     # expects billDate as String in format "Year-Month-Day" Example: "2013-09-03"
     # expects billCurrency as String containing an ISO 4217 Currency Code
     # return rate or 1 if currency Code is EUR
     def getRateInEUR(self, billDate, billCurrency):
+
         #return 1 if currency is EUR
         if billCurrency == "EUR":
             return 1.0
 
-        # interface for module
-        #billDate = "2013-10-03"
-        rateDate = "1900-01-01"
-        #billCurrency = "USD"
-
-        # reference values
-        date_currency = "EUR"
-        rate = 0.0
-
+        print billDate
         billDateDate = datetime.datetime.strptime(billDate, "%Y-%M-%d")
-        #print billDateDate.strftime("%d.%M.%Y")
         dd = timedelta(days=1)
 
-        #print "hello"
+        # Look for conversion rate on day itself or at most 7 days in advance
+        tries = 0
+        while (not billDate in self.currencies) and tries < 7:
+            billDateDate = billDateDate - dd
+            billDate = billDateDate.strftime("%Y-%M-%d")
+            tries += 1
 
-        # find all Cubes in XML
-        daily_rates_list = self.xml_rates.getElementsByTagName('Cube')
+        if tries == 7:
+            raise IOError("Could not find conversion in week before date")
 
-        while (rate == 0.0):
-            #print rate
-            # find right Cube with time attribute
-            for node in self.xml_rates.getElementsByTagName('Cube'):
-                try:
-                    rateDate = node.attributes['time'].value
-                except KeyError:
-                    i = 0
+        rate = self.currencies[billDate][billCurrency]
 
-                if rateDate == billDate:
-                    try:
-                        date_currency = node.attributes['currency'].value
-                    except KeyError:
-                        i = 0
-
-                    if billCurrency == date_currency:
-                        rate = node.attributes['rate'].value
-
-            if rate == 0.0:
-                billDateDate = billDateDate - dd
-                billDate = billDateDate.strftime("%Y-%M-%d")
-                # determine last rate before current date by rerunning process
-
-        return float(rate)
-
-    #print getRateInEUR("2013-10-03","USD")
+        return rate
 
     def cleanUpRates(self):
         try:
