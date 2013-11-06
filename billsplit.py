@@ -1,10 +1,13 @@
 from __future__ import print_function
 from collections import defaultdict
-from download_rates import getRateInEUR
 import datetime
 import sys
+import download_rates
+
 
 def billsplit(persons, bills):
+
+    rateConverter = download_rates.RateConverter()
 
     accounts = dict()
     for person in persons:
@@ -39,7 +42,7 @@ def billsplit(persons, bills):
             print ("Bill Number: %s is missing a Date, used todays." % (billNumber))
 
         #get Conversion Rate
-        conversionRate = 1.0 / getRateInEUR(billDateStr,bCurrency)
+        conversionRate = 1.0 / rateConverter.getRateInEUR(billDateStr,bCurrency)
         print ("Bill Number: %s is denoted in %s and is converted by %.06f" % (billNumber,bCurrency,conversionRate))
         print ("%s" % b["name"])
 
