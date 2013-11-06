@@ -4,16 +4,15 @@ from xml.dom import minidom
 from datetime import date, timedelta
 from collections import defaultdict
 
-#TODO parse all rates and put into buffer array
 class RateConverter:
 
     def __init__(self):
         self.rates_filename = "rates-last90d.xml"
-        self.xml_rates = minidom.parse(self.rates_filename)
+        xml_rates = minidom.parse(self.rates_filename)
 
         # Get first cube node
         # Skip gesmes nodes
-        parentCubeNode = self.xml_rates.firstChild.childNodes[2]
+        parentCubeNode = xml_rates.firstChild.childNodes[2]
 
         self.currencies = defaultdict(lambda: dict())
 
@@ -31,11 +30,9 @@ class RateConverter:
     # return rate or 1 if currency Code is EUR
     def getRateInEUR(self, billDate, billCurrency):
 
-        #return 1 if currency is EUR
         if billCurrency == "EUR":
             return 1.0
 
-        print billDate
         billDateDate = datetime.datetime.strptime(billDate, "%Y-%M-%d")
         dd = timedelta(days=1)
 
