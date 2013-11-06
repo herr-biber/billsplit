@@ -14,10 +14,8 @@ def billsplit(persons, bills):
         accounts[person] = 0.0
 
     personalBills = defaultdict(dict)
-    billNumber = 0
 
-    for b in bills:
-        billNumber = billNumber + 1
+    for billNumber, b in enumerate(bills):
 
         amount = b["amount"]
 
