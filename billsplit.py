@@ -23,11 +23,11 @@ def billsplit(persons, bills):
         amountPerPerson = amount / len(b["debtors"])
 
         if not 'currency' in b:
-            raise IOError("Bill Number: %d is incomplete, currency missing." % (billNumber))
+            raise IOError("Bill Number: %d is incomplete, currency missing." % billNumber)
 
         if not 'date' in b:
             b['date'] = datetime.date.today().strftime("%Y-%M-%d")
-            print ("Bill Number: %d is missing a Date, used today's date." % (billNumber))
+            print ("Bill Number: %d is missing a Date, used today's date." % billNumber)
 
         #get Conversion Rate
         conversionRate = 1.0 / rateConverter.getRateInEUR(b['date'], b['currency'])
