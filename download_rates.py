@@ -9,6 +9,7 @@ class RateConverter:
 
     def __init__(self):
         self.rates_filename = "rates-last90d.xml"
+        self.xml_rates = minidom.parse(self.rates_filename)
 
     # expects billDate as String in format "Year-Month-Day" Example: "2013-09-03"
     # expects billCurrency as String containing an ISO 4217 Currency Code
@@ -17,8 +18,6 @@ class RateConverter:
         #return 1 if currency is EUR
         if billCurrency == "EUR":
             return 1.0
-
-        xml_rates = minidom.parse(self.rates_filename)
 
         # interface for module
         #billDate = "2013-10-03"
@@ -36,12 +35,12 @@ class RateConverter:
         #print "hello"
 
         # find all Cubes in XML
-        daily_rates_list = xml_rates.getElementsByTagName('Cube')
+        daily_rates_list = self.xml_rates.getElementsByTagName('Cube')
 
         while (rate == 0.0):
             #print rate
             # find right Cube with time attribute
-            for node in xml_rates.getElementsByTagName('Cube'):
+            for node in self.xml_rates.getElementsByTagName('Cube'):
                 try:
                     rateDate = node.attributes['time'].value
                 except KeyError:
@@ -59,7 +58,7 @@ class RateConverter:
             if rate == 0.0:
                 billDateDate = billDateDate - dd
                 billDate = billDateDate.strftime("%Y-%M-%d")
-            # determine last rate before current date by rerunning process
+                # determine last rate before current date by rerunning process
 
         return float(rate)
 
@@ -72,7 +71,7 @@ class RateConverter:
 
         except IOError:
             pass
-        #do nothing
+            #do nothing
 
     def receiveECBRates(self):
         ecbURL = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"
