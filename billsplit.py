@@ -15,6 +15,9 @@ def billsplit(bills):
         for debtor in b['debtors']:
             persons.add(debtor)
 
+    print("Persons involved: " + ', '.join(sorted(persons)))
+    print()
+
     accounts = dict()
     for person in persons:
         accounts[person] = 0.0
