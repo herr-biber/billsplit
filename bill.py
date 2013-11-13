@@ -87,4 +87,4 @@ bills = [
     },
 ]
 
-billsplit(all, bills)
+billsplit(bills)

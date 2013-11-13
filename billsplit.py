@@ -5,9 +5,15 @@ import sys
 import download_rates
 
 
-def billsplit(persons, bills):
+def billsplit(bills):
 
     rateConverter = download_rates.RateConverter()
+
+    # get all distinct persons
+    persons = set()
+    for b in bills:
+        for debtor in b['debtors']:
+            persons.add(debtor)
 
     accounts = dict()
     for person in persons:
